@@ -231,6 +231,7 @@ dnl			else
 			if test "$x_ac_have_i2c" = yes; then
 				HD44780_DRIVERS="$HD44780_DRIVERS hd44780-hd44780-i2c.o"
 				HD44780_DRIVERS="$HD44780_DRIVERS hd44780-hd44780-piplate.o"
+				HD44780_DRIVERS="$HD44780_DRIVERS hd44780-hd44780-native-i2c.o"
 			fi
 			if test "$x_ac_have_spi" = yes; then
 				HD44780_DRIVERS="$HD44780_DRIVERS hd44780-hd44780-spi.o hd44780-hd44780-pifacecad.o"
