@@ -54,6 +54,7 @@
 void native_i2c_HD44780_senddata(PrivateData *p, unsigned char displayID, unsigned char flags, unsigned char ch);
 void native_i2c_HD44780_backlight(PrivateData *p, unsigned char state);
 void native_i2c_HD44780_close(PrivateData *p);
+void native_i2c_HD44780_set_contrast(PrivateData *p, unsigned char value);
 
 #define BL	0x80
 
@@ -150,6 +151,7 @@ hd_init_native_i2c(Driver *drvthis)
 	hd44780_functions->senddata = native_i2c_HD44780_senddata;
 	hd44780_functions->backlight = native_i2c_HD44780_backlight;
 	hd44780_functions->close = native_i2c_HD44780_close;
+	hd44780_functions->set_contrast = native_i2c_HD44780_set_contrast;
 	/* Display init */
 
 	unsigned char data[2];
@@ -281,6 +283,7 @@ native_i2c_HD44780_senddata(PrivateData *p, unsigned char displayID, unsigned ch
 void native_i2c_HD44780_backlight(PrivateData *p, unsigned char state)
 {
 
+
 //	printf("Backlight %d",state);
 	unsigned char data[2];
 
@@ -311,4 +314,29 @@ void native_i2c_HD44780_backlight(PrivateData *p, unsigned char state)
 	data[1] = 0x28;
 	native_i2c_out(p, data);
 
+}
+
+ /**
+ * Change display contrast.
+ * \param p      Pointer to driver's private data structure.
+ * \param value  New contrast value (one byte).
+ */
+void native_i2c_HD44780_set_contrast(PrivateData *p, unsigned char value)
+{
+	unsigned char data[2];
+//**** Set OLED Characterization
+	data[0] = 0x80;
+	data[1] = 0x2A;   	// **** Set "RE"=1
+	native_i2c_out(p, data);
+	data[1] = 0x79;   	// **** Set "SD"=1
+	native_i2c_out(p, data);
+
+
+	data[1] = 0x81; //set contrast
+	native_i2c_out(p, data);
+	data[1] = value;
+	native_i2c_out(p, data);
+
+	data[1] = 0x78;   	// **** Exiting Set OLED Characterization
+	native_i2c_out(p, data);
 }
