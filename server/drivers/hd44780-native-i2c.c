@@ -65,7 +65,6 @@ void native_i2c_HD44780_set_contrast(PrivateData *p, unsigned char value);
 static void
 native_i2c_out(PrivateData *p, unsigned char val[2])
 {
-//	char data[2];
 	int datalen;
 	static int no_more_errormsgs=0;
 #ifdef HAVE_DEV_IICBUS_IIC_H
@@ -204,11 +203,6 @@ hd_init_native_i2c(Driver *drvthis)
 	data[1] = 0x10;
 	native_i2c_out(p, data);
 
-	//data[1] = 0x81;   	// **** Set Contrast
-	//native_i2c_out(p, data);
-	//data[1] = 0x50;
-	//native_i2c_out(p, data);
-
 	data[1] = 0xDB;   	// **** Set VCOM deselect level
 	native_i2c_out(p, data);
 	data[1] = 0x30;   	// **** VCC x 0.83
@@ -238,6 +232,7 @@ hd_init_native_i2c(Driver *drvthis)
 	native_i2c_out(p, data);
 
 	//sleep 0.1s;
+    hd44780_functions->uPause(p, 5000);
 	data[1] = 0x0C;   	// **** Turn on Display
 	native_i2c_out(p, data);
 
